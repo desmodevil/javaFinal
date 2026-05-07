@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/university_management_db
     username: postgres
-    password: postgres
+    password: 1111
 
   jpa:
     hibernate:

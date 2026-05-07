@@ -1,6 +1,6 @@
 package desmodevil.javafinal.entity;
 
-import com.paneduard.universitymanagement.enums.PanEduardRole;
+import desmodevil.javafinal.enums.PanEduardRole;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,6 +32,7 @@ public class PanEduardUser {
     @Column(nullable = false, length = 30)
     private PanEduardRole role;
 
+    @Builder.Default
     @Column(nullable = false)
     private Boolean enabled = true;
 

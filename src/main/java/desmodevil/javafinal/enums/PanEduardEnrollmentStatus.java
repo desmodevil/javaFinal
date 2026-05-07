@@ -1,4 +1,7 @@
 package desmodevil.javafinal.enums;
 
-public class PanEduardEnrollmentStatus {
+public enum PanEduardEnrollmentStatus {
+    ACTIVE,
+    COMPLETED,
+    CANCELLED
 }

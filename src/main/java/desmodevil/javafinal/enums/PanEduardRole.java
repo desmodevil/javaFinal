@@ -1,4 +1,7 @@
 package desmodevil.javafinal.enums;
 
-public class PanEduardRole {
+public enum PanEduardRole {
+    ADMIN,
+    INSTRUCTOR,
+    STUDENT
 }

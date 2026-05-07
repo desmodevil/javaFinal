@@ -1,6 +1,6 @@
 package desmodevil.javafinal.entity;
 
-import com.paneduard.universitymanagement.enums.PanEduardEnrollmentStatus;
+import desmodevil.javafinal.enums.PanEduardEnrollmentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
