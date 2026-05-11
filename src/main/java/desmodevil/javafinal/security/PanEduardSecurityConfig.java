@@ -32,7 +32,7 @@ import java.time.LocalDateTime;
 public class PanEduardSecurityConfig {
 
     private final PanEduardJwtAuthenticationFilter jwtAuthenticationFilter;
-    private final PanEduardUserDetailsService userDetailsService;
+    private final desmodevil.javafinal.security.PanEduardUserDetailsService userDetailsService;
     private final ObjectMapper objectMapper;
 
     @Bean

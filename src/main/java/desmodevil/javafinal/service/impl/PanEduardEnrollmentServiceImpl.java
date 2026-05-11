@@ -12,6 +12,7 @@ import desmodevil.javafinal.mapper.PanEduardEnrollmentMapper;
 import desmodevil.javafinal.repository.PanEduardCourseRepository;
 import desmodevil.javafinal.repository.PanEduardEnrollmentRepository;
 import desmodevil.javafinal.repository.PanEduardStudentRepository;
+import desmodevil.javafinal.service.PanEduardAsyncProcessService;
 import desmodevil.javafinal.service.PanEduardEnrollmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ public class PanEduardEnrollmentServiceImpl implements PanEduardEnrollmentServic
     private final PanEduardStudentRepository studentRepository;
     private final PanEduardCourseRepository courseRepository;
     private final PanEduardEnrollmentMapper enrollmentMapper;
+    private final PanEduardAsyncProcessService asyncProcessService;
 
     @Override
     @Transactional
@@ -48,6 +50,11 @@ public class PanEduardEnrollmentServiceImpl implements PanEduardEnrollmentServic
         }
 
         PanEduardEnrollment savedEnrollment = enrollmentRepository.save(enrollment);
+        asyncProcessService.sendEnrollmentNotification(
+                savedEnrollment.getStudent().getId(),
+                savedEnrollment.getStudent().getEmail(),
+                savedEnrollment.getCourse().getCode()
+        );
 
         return enrollmentMapper.toResponseDto(savedEnrollment);
     }
