@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import desmodevil.javafinal.service.PanEduardAsyncProcessService;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -30,6 +31,8 @@ public class PanEduardFileAttachmentServiceImpl implements PanEduardFileAttachme
     private final PanEduardFileAttachmentRepository fileAttachmentRepository;
     private final PanEduardCourseRepository courseRepository;
     private final PanEduardFileAttachmentMapper fileAttachmentMapper;
+    private final PanEduardAsyncProcessService asyncProcessService;
+
 
     @Value("${file.upload-dir}")
     private String uploadDir;
@@ -75,6 +78,11 @@ public class PanEduardFileAttachmentServiceImpl implements PanEduardFileAttachme
 
             PanEduardFileAttachment savedFileAttachment =
                     fileAttachmentRepository.save(fileAttachment);
+            asyncProcessService.processUploadedFile(
+                    savedFileAttachment.getId(),
+                    savedFileAttachment.getOriginalFileName(),
+                    savedFileAttachment.getSize()
+            );
 
             return fileAttachmentMapper.toResponseDto(savedFileAttachment);
         } catch (IOException exception) {
