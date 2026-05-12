@@ -18,11 +18,13 @@ import java.util.Map;
 @RestControllerAdvice
 public class PanEduardGlobalExceptionHandler {
 
+
     @ExceptionHandler(PanEduardResourceNotFoundException.class)
     public ResponseEntity<PanEduardErrorResponse> handleResourceNotFound(
             PanEduardResourceNotFoundException exception,
             HttpServletRequest request
     ) {
+        log.warn("Resource not found: path={}, message={}", request.getRequestURI(), exception.getMessage());
         PanEduardErrorResponse response = PanEduardErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.NOT_FOUND.value())
@@ -44,7 +46,7 @@ public class PanEduardGlobalExceptionHandler {
         exception.getBindingResult().getFieldErrors().forEach(error ->
                 fieldErrors.put(error.getField(), error.getDefaultMessage())
         );
-
+        log.warn("Validation failed: path={}, fieldErrors={}", request.getRequestURI(), fieldErrors);
         PanEduardErrorResponse response = PanEduardErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST.value())
@@ -62,6 +64,7 @@ public class PanEduardGlobalExceptionHandler {
             IllegalArgumentException exception,
             HttpServletRequest request
     ) {
+        log.warn("Bad request: path={}, message={}", request.getRequestURI(), exception.getMessage());
         PanEduardErrorResponse response = PanEduardErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST.value())
@@ -78,6 +81,7 @@ public class PanEduardGlobalExceptionHandler {
             MethodArgumentTypeMismatchException exception,
             HttpServletRequest request
     ) {
+        log.warn("Invalid parameter: path={}, parameter={}", request.getRequestURI(), exception.getName());
         PanEduardErrorResponse response = PanEduardErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST.value())
@@ -94,6 +98,7 @@ public class PanEduardGlobalExceptionHandler {
             HttpMessageNotReadableException exception,
             HttpServletRequest request
     ) {
+        log.warn("Invalid request body: path={}", request.getRequestURI());
         PanEduardErrorResponse response = PanEduardErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST.value())

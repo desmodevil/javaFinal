@@ -11,6 +11,7 @@ import desmodevil.javafinal.security.PanEduardJwtService;
 import desmodevil.javafinal.security.PanEduardUserDetailsService;
 import desmodevil.javafinal.service.PanEduardAuthService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PanEduardAuthServiceImpl implements PanEduardAuthService {
@@ -53,6 +55,13 @@ public class PanEduardAuthServiceImpl implements PanEduardAuthService {
 
         PanEduardUser savedUser = userRepository.save(user);
 
+        log.info(
+                "User registered successfully: userId={}, username={}, role={}",
+                savedUser.getId(),
+                savedUser.getUsername(),
+                savedUser.getRole()
+        );
+
         UserDetails userDetails = userDetailsService.loadUserByUsername(savedUser.getUsername());
         String token = jwtService.generateToken(userDetails);
 
@@ -68,6 +77,8 @@ public class PanEduardAuthServiceImpl implements PanEduardAuthService {
                         requestDto.getPassword()
                 )
         );
+
+        log.info("User logged in successfully: usernameOrEmail={}", requestDto.getUsernameOrEmail());
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(requestDto.getUsernameOrEmail());
         String token = jwtService.generateToken(userDetails);

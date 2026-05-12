@@ -15,6 +15,7 @@ import desmodevil.javafinal.repository.PanEduardStudentRepository;
 import desmodevil.javafinal.service.PanEduardAsyncProcessService;
 import desmodevil.javafinal.service.PanEduardEnrollmentService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +31,7 @@ public class PanEduardEnrollmentServiceImpl implements PanEduardEnrollmentServic
     private final PanEduardEnrollmentMapper enrollmentMapper;
     private final PanEduardAsyncProcessService asyncProcessService;
 
+    @Slf4j
     @Override
     @Transactional
     public PanEduardEnrollmentResponseDto createEnrollment(PanEduardEnrollmentRequestDto requestDto) {
