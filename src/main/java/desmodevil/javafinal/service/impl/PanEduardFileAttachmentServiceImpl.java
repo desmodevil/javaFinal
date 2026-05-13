@@ -113,6 +113,12 @@ public class PanEduardFileAttachmentServiceImpl implements PanEduardFileAttachme
                 throw new PanEduardResourceNotFoundException("File not found on disk with id: " + fileId);
             }
 
+            log.info(
+                    "File downloaded: fileId={}, originalFileName={}",
+                    fileAttachment.getId(),
+                    fileAttachment.getOriginalFileName()
+            );
+
             return resource;
         } catch (MalformedURLException exception) {
             throw new IllegalStateException("Could not read file", exception);
@@ -153,6 +159,12 @@ public class PanEduardFileAttachmentServiceImpl implements PanEduardFileAttachme
         } catch (IOException exception) {
             throw new IllegalStateException("Could not delete file from disk", exception);
         }
+
+        log.info(
+                "File deleted: fileId={}, originalFileName={}",
+                fileAttachment.getId(),
+                fileAttachment.getOriginalFileName()
+        );
 
         fileAttachmentRepository.delete(fileAttachment);
     }
