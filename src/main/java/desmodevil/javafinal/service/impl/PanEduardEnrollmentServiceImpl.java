@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PanEduardEnrollmentServiceImpl implements PanEduardEnrollmentService {
@@ -31,7 +32,6 @@ public class PanEduardEnrollmentServiceImpl implements PanEduardEnrollmentServic
     private final PanEduardEnrollmentMapper enrollmentMapper;
     private final PanEduardAsyncProcessService asyncProcessService;
 
-    @Slf4j
     @Override
     @Transactional
     public PanEduardEnrollmentResponseDto createEnrollment(PanEduardEnrollmentRequestDto requestDto) {
@@ -56,6 +56,13 @@ public class PanEduardEnrollmentServiceImpl implements PanEduardEnrollmentServic
                 savedEnrollment.getStudent().getId(),
                 savedEnrollment.getStudent().getEmail(),
                 savedEnrollment.getCourse().getCode()
+        );
+
+        log.info(
+                "Enrollment created: enrollmentId={}, studentId={}, courseId={}",
+                savedEnrollment.getId(),
+                savedEnrollment.getStudent().getId(),
+                savedEnrollment.getCourse().getId()
         );
 
         return enrollmentMapper.toResponseDto(savedEnrollment);
@@ -112,6 +119,13 @@ public class PanEduardEnrollmentServiceImpl implements PanEduardEnrollmentServic
 
         PanEduardEnrollment updatedEnrollment = enrollmentRepository.save(enrollment);
 
+        log.info(
+                "Enrollment updated: enrollmentId={}, status={}, grade={}",
+                updatedEnrollment.getId(),
+                updatedEnrollment.getStatus(),
+                updatedEnrollment.getGrade()
+        );
+
         return enrollmentMapper.toResponseDto(updatedEnrollment);
     }
 
@@ -119,6 +133,7 @@ public class PanEduardEnrollmentServiceImpl implements PanEduardEnrollmentServic
     @Transactional
     public void deleteEnrollment(Long id) {
         PanEduardEnrollment enrollment = findEnrollmentEntityById(id);
+        log.info("Enrollment deleted: enrollmentId={}", id);
         enrollmentRepository.delete(enrollment);
     }
 

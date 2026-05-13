@@ -9,6 +9,7 @@ import desmodevil.javafinal.repository.PanEduardCourseRepository;
 import desmodevil.javafinal.repository.PanEduardFileAttachmentRepository;
 import desmodevil.javafinal.service.PanEduardFileAttachmentService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -24,6 +25,7 @@ import java.nio.file.*;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PanEduardFileAttachmentServiceImpl implements PanEduardFileAttachmentService {
@@ -81,6 +83,14 @@ public class PanEduardFileAttachmentServiceImpl implements PanEduardFileAttachme
             asyncProcessService.processUploadedFile(
                     savedFileAttachment.getId(),
                     savedFileAttachment.getOriginalFileName(),
+                    savedFileAttachment.getSize()
+            );
+
+            log.info(
+                    "File uploaded: fileId={}, originalFileName={}, courseId={}, size={}",
+                    savedFileAttachment.getId(),
+                    savedFileAttachment.getOriginalFileName(),
+                    course.getId(),
                     savedFileAttachment.getSize()
             );
 
