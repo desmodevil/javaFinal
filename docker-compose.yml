@@ -1,0 +1,62 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: pan-eduard-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: university_management_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1111
+    ports:
+      - "5432:5432"
+    volumes:
+      - pan_eduard_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d university_management_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pan-eduard-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/university_management_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 1111
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      APP_JWT_SECRET: bXktc3VwZXItc2VjcmV0LWtleS1mb3Itand0LXBhbjEtZWR1YXJkLTEyMzQ1Njc4OTA=
+      APP_JWT_EXPIRATION_MS: 86400000
+      FILE_UPLOAD_DIR: /app/uploads
+      LOGGING_FILE_NAME: /app/logs/javafinal.log
+    volumes:
+      - pan_eduard_uploads:/app/uploads
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  pan_eduard_postgres_data:
+  pan_eduard_uploads:

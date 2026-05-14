@@ -3,13 +3,13 @@ spring:
     name: javaFinal
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/university_management_db
-    username: postgres
-    password: 1111
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/university_management_db}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:1111}
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
     show-sql: true
     properties:
       hibernate:
@@ -25,17 +25,27 @@ server:
 
 app:
   jwt:
-    secret: bXktc3VwZXItc2VjcmV0LWtleS1mb3Itand0LXBhbjEtZWR1YXJkLTEyMzQ1Njc4OTA=
-    expiration-ms: 86400000
+    secret: ${APP_JWT_SECRET:bXktc3VwZXItc2VjcmV0LWtleS1mb3Itand0LXBhbjEtZWR1YXJkLTEyMzQ1Njc4OTA=}
+    expiration-ms: ${APP_JWT_EXPIRATION_MS:86400000}
 
 file:
-  upload-dir: uploads
+  upload-dir: ${FILE_UPLOAD_DIR:uploads}
 
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
   api-docs:
     path: /v3/api-docs
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
 
 logging:
   level:
@@ -44,7 +54,7 @@ logging:
     org.springframework.security: WARN
     org.hibernate.SQL: DEBUG
   file:
-    name: logs/javafinal.log
+    name: ${LOGGING_FILE_NAME:logs/javafinal.log}
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n"
